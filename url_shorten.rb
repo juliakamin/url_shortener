@@ -18,3 +18,5 @@ post '/new' do
   end
   "Your new URL is #{new_url.join} which redirects to #{params["url"]}"
 end
+
+puts "julia says hi"
