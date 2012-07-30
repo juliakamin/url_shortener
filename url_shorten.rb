@@ -1,4 +1,8 @@
 require 'sinatra'
+require 'sqlite3'
+
+db = SQLite3::Database.new('url.db')
+
 
 get '/new' do
   "<html>
@@ -16,7 +20,13 @@ post '/new' do
   6.times do 
     new_url << ('A'..'Z').to_a.sample
   end
+  db.execute("INSERT into urls values (?,?)", params[:url], new_url.join)
   "Your new URL is #{new_url.join} which redirects to #{params["url"]}"
 end
 
-puts "julia says hi"
+get '/:short_url' do |url|
+  result = db.execute("select url from urls where short = ?", url)
+  destination_url = result[0][0]
+  redirect(destination_url)
+end
+
